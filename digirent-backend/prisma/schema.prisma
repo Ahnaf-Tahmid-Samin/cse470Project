@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+//enums
+
+enum ROLE {
+  Admin
+  Normal
+}
+
+enum vehicleStatus {
+  Available
+  Unavailable
+}
+
+enum vehicleType {
+  micro
+  suv
+  cuv
+  sedan
+  van
+}
+
+enum RentStatus {
+  Booked
+  Canceled
+}
+
+// Models
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  password  String
+  name      String
+  contact   String
+  email     String   @unique
+  role      ROLE
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model vehicles {
+  id       String        @id @default(uuid())
+  model    String
+  type     vehicleType
+  seats    Int
+  location String
+  status   vehicleStatus
+}
+
+model rents {
+  id           String     @id @default(uuid())
+  username     String
+  vehicleid    String
+  vehiclemodel String
+  pickup       String
+  destination  String
+  status       RentStatus @default(Booked)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
